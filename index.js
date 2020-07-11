@@ -1,63 +1,73 @@
-(async () => {
-  const getCovidData = async function (url) {
-    let response = await fetch(url)
-    if (response.status !== 200) {
-      console.log('Looks like there was a problem. Status Code: ' +
-        response.status);
-      return;
+document.addEventListener('DOMContentLoaded', async () => {
+  const stateSelect = document.getElementById('StateSelect')
+
+  async function updateResults(location = stateSelect.value) {
+    const getCovidData = async function (state = location) {
+      const url = `https://covidtracking.com/api/v1/states/${ state }/current.json`;
+      const response = await fetch(url)
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+
+      const data = await response.json()
+      return data;
+    };
+
+    const formatResults = function (r) {
+      const deprecatedData = [
+        'checkTimeEt',
+        'commercialScore',
+        'dateChecked',
+        'dateModified',
+        'grade',
+        'hash',
+        'hospitalized',
+        'negativeIncrease',
+        'negativeRegularScore',
+        'negativeScore',
+        'posNeg',
+        'positiveScore',
+        'score',
+        'total',
+      ]
+      const filteredResults = Object.keys(r).reduce((acc, key) => {
+        if (!deprecatedData.includes(key)) {
+          acc[key] = r[key] || 'not reported';
+        }
+        return acc;
+      }, {});
+
+      const date = new Date(filteredResults.lastUpdateEt);
+      const updated = `Updated on ${date.toDateString()} at ${date.toLocaleTimeString()}.`;
+      const results = {
+        updated,
+        positiveCases: filteredResults.positiveCasesViral,
+        positiveIncrease: filteredResults.positiveIncrease,
+        recovered: filteredResults.recovered,
+        death: filteredResults.death,
+        deathIncrease: filteredResults.deathIncrease,
+        hospitalizedCurrently: filteredResults.hospitalizedCurrently,
+        hospitalizedIncrease: filteredResults.hospitalizedIncrease,
+        inIcuCurrently: filteredResults.inIcuCurrently,
+      };
+      return results;
     }
 
-    let data = await response.json()
-    return data;
-  };
-  const fetchResponse = await getCovidData('https://covidtracking.com/api/v1/states/nj/current.json');
+    const fetchResponse = await getCovidData(location);
+    const formattedResults = formatResults(fetchResponse);
+    console.log(formattedResults);
 
-  const formatResults = function (r) {
-    const deprecatedData = [
-      'checkTimeEt',
-      'commercialScore',
-      'dateChecked',
-      'dateModified',
-      'grade',
-      'hash',
-      'hospitalized',
-      'negativeIncrease',
-      'negativeRegularScore',
-      'negativeScore',
-      'posNeg',
-      'positiveScore',
-      'score',
-      'total',
-    ]
-    const filteredResults = Object.keys(r).reduce((acc, key) => {
-      if (!deprecatedData.includes(key)) {
-        acc[key] = r[key];
-      }
-      return acc;
-    }, {});
-    console.log(filteredResults)
-
-    const date = new Date(filteredResults.lastUpdateEt);
-    const updated = `${date.toDateString()}<br>at ${date.toLocaleTimeString()}`;
-    const results = {
-      updated,
-      positiveCases: filteredResults.positiveCasesViral,
-      positiveIncrease: filteredResults.positiveIncrease,
-      recovered: filteredResults.recovered,
-      death: filteredResults.death,
-      deathIncrease: filteredResults.deathIncrease,
-      hospitalizedCurrently: filteredResults.hospitalizedCurrently,
-      hospitalizedIncrease: filteredResults.hospitalizedIncrease,
-      inIcuCurrently: filteredResults.inIcuCurrently,
-    };
-    return results;
+    Object.keys(formattedResults).forEach(key => {
+      document.getElementById(`${key}`).innerHTML = formattedResults[key];
+    });
   }
 
-  const formattedResults = formatResults(fetchResponse);
-  console.log(formattedResults);
+  stateSelect.addEventListener('change', (evt) => {
+    console.log(evt.currentTarget.value)
+    updateResults(evt.currentTarget.value);
+  })
 
-  const dataTable = document.getElementById('CurrentData');
-  Object.keys(formattedResults).forEach(key => {
-    dataTable.querySelector(`.${key}`).innerHTML = formattedResults[key];
-  });
-})()
+  updateResults()
+})

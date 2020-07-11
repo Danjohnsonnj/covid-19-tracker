@@ -1,22 +1,40 @@
 * {
   font-family: apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
   box-sizing: border-box;
 }
 
 body {
-  max-width: 100vw;
-  width: 375px;
-  margin: 5px auto;
+  width: 100%;
+  max-width: 75ch;
+  margin: 0 auto 10vh;
   min-height: 100vh;
 }
 
 h1 {
-  margin: 0.5em 0;
+  margin: 0;
   font-size: 22px;
-  background: #dadada;
+  background: #bbb;
   text-align: center;
   padding: 0.5em 0;
+}
+
+form {
+  margin: 0 0 1em;
+  padding: 1em;
+  font-size: 20px;
+  text-align: center;
+  background: #dadada;
+}
+
+select {
+  font-size: 20px;
+}
+
+#Updated {
+  font-size: 13px;
+  margin: 0.5 5px;
 }
 
 p {
@@ -35,7 +53,7 @@ p {
   text-align: left;
   text-transform: capitalize;
   padding: 2em 1em 2em 1em;
-  border-left: 1px solid #222;
+  /* border-left: 1px solid #222; */
 }
 
 #CurrentData th.sub {
@@ -49,12 +67,22 @@ p {
 #CurrentData td {
   text-align: right;
   padding: 2em 1em 2em 2em;
-  border-right: 1px solid #222;
+  /* border-right: 1px solid #222; */
 }
 
 #CurrentData th,
 #CurrentData td {
   border-bottom: 1px solid #222;
+}
+
+#CurrentData tr.noBorders th {
+  padding: 1em 5px;
+  border: none;
+}
+
+#CurrentData tr.noBorders td {
+  padding: 1em 5px;
+  border: none;
 }
 
 #CurrentData tr:first-of-type th {

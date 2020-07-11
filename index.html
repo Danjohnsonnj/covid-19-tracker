@@ -1,50 +1,64 @@
 <html>
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COVID-19 Tracker</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-  <h1>COVID-19 Data for New Jersey</h1>
-  <p>Data from <a href="https://covidtracking.com" target="_blank">covidtracking.com</a>.</p>
+  <h1>COVID-19 Data</h1>
+  <form>
+    <label for="state">Choose a state: </label>
+      <select id="StateSelect">
+        <option value="nj" selected> New Jersey</option>
+        <option value="pa"> Pennsylvania</option>
+        <option value="tx"> Texas</option>
+        <option value="vt"> Vermont</option>
+      </select>
+    </label>
+  </form>
+
+  <div id="updated"></div>
+
   <table id="CurrentData">
     <tr>
-      <th>updated</th>
-      <td class="updated"></td>
-    </tr>
-    <tr>
       <th>positive cases</th>
-      <td class="positiveCases"></td>
+      <td id="positiveCases"></td>
     </tr>
     <tr>
       <th class="sub">positive increase</th>
-      <td class="positiveIncrease sub"></td>
+      <td id="positiveIncrease"></td>
     </tr>
     <tr>
       <th>deaths</th>
-      <td class="death"></td>
+      <td id="death"></td>
     </tr>
     <tr>
       <th class="sub">deaths increase</th>
-      <td class="deathIncrease sub"></td>
+      <td id="deathIncrease"></td>
     </tr>
     <tr>
       <th>recovered</th>
-      <td class="recovered"></td>
+      <td id="recovered"></td>
     </tr>
     <tr>
       <th>hospitalized</th>
-      <td class="hospitalizedCurrently"></td>
+      <td id="hospitalizedCurrently"></td>
     </tr>
     <tr>
       <th class="sub">hospitalized increase</th>
-      <td class="hospitalizedIncrease sub"></td>
+      <td id="hospitalizedIncrease"></td>
     </tr>
     <tr>
       <th>in ICU</th>
-      <td class="inIcuCurrently"></td>
+      <td id="inIcuCurrently"></td>
     </tr>
   </table>
+
+  <p>Data from <a href="https://covidtracking.com" target="_blank">covidtracking.com</a>.</p>
+  <p>Built by <a href="https://twitter.com/danjnj" target="_blank">@DanJNJ</a>.</p>
 
   <script src="./index.js"></script>
 </body>
