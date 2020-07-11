@@ -118,54 +118,62 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"index.js":[function(require,module,exports) {
-(async () => {
-  const getCovidData = async function (url) {
-    let response = await fetch(url);
+document.addEventListener('DOMContentLoaded', async () => {
+  const stateSelect = document.getElementById('StateSelect');
 
-    if (response.status !== 200) {
-      console.log('Looks like there was a problem. Status Code: ' + response.status);
-      return;
-    }
+  async function updateResults(location = stateSelect.value) {
+    const getCovidData = async function (state = location) {
+      const url = `https://covidtracking.com/api/v1/states/${state}/current.json`;
+      const response = await fetch(url);
 
-    let data = await response.json();
-    return data;
-  };
-
-  const fetchResponse = await getCovidData('https://covidtracking.com/api/v1/states/nj/current.json');
-
-  const formatResults = function (r) {
-    const deprecatedData = ['checkTimeEt', 'commercialScore', 'dateChecked', 'dateModified', 'grade', 'hash', 'hospitalized', 'negativeIncrease', 'negativeRegularScore', 'negativeScore', 'posNeg', 'positiveScore', 'score', 'total'];
-    const filteredResults = Object.keys(r).reduce((acc, key) => {
-      if (!deprecatedData.includes(key)) {
-        acc[key] = r[key];
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' + response.status);
+        return;
       }
 
-      return acc;
-    }, {});
-    console.log(filteredResults);
-    const date = new Date(filteredResults.lastUpdateEt);
-    const updated = `${date.toDateString()}<br>at ${date.toLocaleTimeString()}`;
-    const results = {
-      updated,
-      positiveCases: filteredResults.positiveCasesViral,
-      positiveIncrease: filteredResults.positiveIncrease,
-      recovered: filteredResults.recovered,
-      death: filteredResults.death,
-      deathIncrease: filteredResults.deathIncrease,
-      hospitalizedCurrently: filteredResults.hospitalizedCurrently,
-      hospitalizedIncrease: filteredResults.hospitalizedIncrease,
-      inIcuCurrently: filteredResults.inIcuCurrently
+      const data = await response.json();
+      return data;
     };
-    return results;
-  };
 
-  const formattedResults = formatResults(fetchResponse);
-  console.log(formattedResults);
-  const dataTable = document.getElementById('CurrentData');
-  Object.keys(formattedResults).forEach(key => {
-    dataTable.querySelector(`.${key}`).innerHTML = formattedResults[key];
+    const formatResults = function (r) {
+      const deprecatedData = ['checkTimeEt', 'commercialScore', 'dateChecked', 'dateModified', 'grade', 'hash', 'hospitalized', 'negativeIncrease', 'negativeRegularScore', 'negativeScore', 'posNeg', 'positiveScore', 'score', 'total'];
+      const filteredResults = Object.keys(r).reduce((acc, key) => {
+        if (!deprecatedData.includes(key)) {
+          acc[key] = r[key] || 'not reported';
+        }
+
+        return acc;
+      }, {});
+      const date = new Date(filteredResults.lastUpdateEt);
+      const updated = `Updated on ${date.toDateString()} at ${date.toLocaleTimeString()}.`;
+      const results = {
+        updated,
+        positiveCases: filteredResults.positiveCasesViral,
+        positiveIncrease: filteredResults.positiveIncrease,
+        recovered: filteredResults.recovered,
+        death: filteredResults.death,
+        deathIncrease: filteredResults.deathIncrease,
+        hospitalizedCurrently: filteredResults.hospitalizedCurrently,
+        hospitalizedIncrease: filteredResults.hospitalizedIncrease,
+        inIcuCurrently: filteredResults.inIcuCurrently
+      };
+      return results;
+    };
+
+    const fetchResponse = await getCovidData(location);
+    const formattedResults = formatResults(fetchResponse);
+    console.log(formattedResults);
+    Object.keys(formattedResults).forEach(key => {
+      document.getElementById(`${key}`).innerHTML = formattedResults[key];
+    });
+  }
+
+  stateSelect.addEventListener('change', evt => {
+    console.log(evt.currentTarget.value);
+    updateResults(evt.currentTarget.value);
   });
-})();
+  updateResults();
+});
 },{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -194,7 +202,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65011" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56196" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
