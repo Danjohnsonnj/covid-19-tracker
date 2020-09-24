@@ -98,7 +98,8 @@ p {
 #Chart {
   width: 100%;
   height: 50vh;
-  background: #bbb;
+  background: linear-gradient(180deg, #bbb, transparent);
+  border: 1px solid #bbb;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -151,6 +152,7 @@ p {
 
 .bar.deaths {
   background: var(--deaths-color);
+  margin-left: 1px;
 }
 
 .key .pos,

@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const fetchResponse = await getCovidData(location);
     const formattedResults = formatResults(fetchResponse);
-    console.log(formattedResults);
 
     const largestPos = formattedResults.reduce((acc, day) => {
       acc = day.positiveIncrease > acc ? day.positiveIncrease : acc
@@ -64,7 +63,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   stateSelect.addEventListener("change", (evt) => {
-    console.log(evt.currentTarget.value);
     updateResults(evt.currentTarget.value);
   });
 

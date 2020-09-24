@@ -155,7 +155,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const fetchResponse = await getCovidData(location);
     const formattedResults = formatResults(fetchResponse);
-    console.log(formattedResults);
     const largestPos = formattedResults.reduce((acc, day) => {
       acc = day.positiveIncrease > acc ? day.positiveIncrease : acc;
       return acc;
@@ -174,7 +173,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   stateSelect.addEventListener("change", evt => {
-    console.log(evt.currentTarget.value);
     updateResults(evt.currentTarget.value);
   });
   updateResults();
@@ -207,7 +205,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50665" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57132" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
