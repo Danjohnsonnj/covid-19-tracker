@@ -107,6 +107,7 @@ p {
 }
 
 #HistoricData {
+  margin: 10px;
   --pos-color: #585858;
   --deaths-color: #929292;
 }
@@ -175,4 +176,17 @@ p {
 
 .key .deaths .color {
   background: var(--deaths-color);
+}
+
+@media all and (max-width: 600px) {
+  .day {
+    width: 20%;
+  }
+
+  .day:nth-child(5),
+  .day:nth-child(6),
+  .day:nth-child(7)
+  {
+    display: none;
+  }
 }
