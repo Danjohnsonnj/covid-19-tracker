@@ -1,40 +1,41 @@
-document.addEventListener('DOMContentLoaded', async () => {
-  const stateSelect = document.getElementById('StateSelect')
+document.addEventListener("DOMContentLoaded", async () => {
+  const stateSelect = document.getElementById("StateSelect");
 
   async function updateResults(location = stateSelect.value) {
     const getCovidData = async function (state = location) {
-      const url = `https://covidtracking.com/api/v1/states/${ state }/current.json`;
-      const response = await fetch(url)
+      const url = `https://api.covidtracking.com/v1/states/${state}/current.json`;
+      const response = await fetch(url);
       if (response.status !== 200) {
-        console.log('Looks like there was a problem. Status Code: ' +
-          response.status);
+        console.log(
+          "Looks like there was a problem. Status Code: " + response.status
+        );
         return;
       }
 
-      const data = await response.json()
+      const data = await response.json();
       return data;
     };
 
     const formatResults = function (r) {
       const deprecatedData = [
-        'checkTimeEt',
-        'commercialScore',
-        'dateChecked',
-        'dateModified',
-        'grade',
-        'hash',
-        'hospitalized',
-        'negativeIncrease',
-        'negativeRegularScore',
-        'negativeScore',
-        'posNeg',
-        'positiveScore',
-        'score',
-        'total',
-      ]
+        "checkTimeEt",
+        "commercialScore",
+        "dateChecked",
+        "dateModified",
+        "grade",
+        "hash",
+        "hospitalized",
+        "negativeIncrease",
+        "negativeRegularScore",
+        "negativeScore",
+        "posNeg",
+        "positiveScore",
+        "score",
+        "total"
+      ];
       const filteredResults = Object.keys(r).reduce((acc, key) => {
         if (!deprecatedData.includes(key)) {
-          acc[key] = r[key] || 'not reported';
+          acc[key] = r[key] || "not reported";
         }
         return acc;
       }, {});
@@ -50,24 +51,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         deathIncrease: filteredResults.deathIncrease,
         hospitalizedCurrently: filteredResults.hospitalizedCurrently,
         hospitalizedIncrease: filteredResults.hospitalizedIncrease,
-        inIcuCurrently: filteredResults.inIcuCurrently,
+        inIcuCurrently: filteredResults.inIcuCurrently
       };
       return results;
-    }
+    };
 
     const fetchResponse = await getCovidData(location);
     const formattedResults = formatResults(fetchResponse);
     console.log(formattedResults);
 
-    Object.keys(formattedResults).forEach(key => {
+    Object.keys(formattedResults).forEach((key) => {
       document.getElementById(`${key}`).innerHTML = formattedResults[key];
     });
   }
 
-  stateSelect.addEventListener('change', (evt) => {
-    console.log(evt.currentTarget.value)
+  stateSelect.addEventListener("change", (evt) => {
+    console.log(evt.currentTarget.value);
     updateResults(evt.currentTarget.value);
-  })
+  });
 
-  updateResults()
-})
+  updateResults();
+});
