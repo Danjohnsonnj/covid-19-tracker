@@ -117,13 +117,18 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"index.js":[function(require,module,exports) {
+})({"historic.js":[function(require,module,exports) {
 document.addEventListener("DOMContentLoaded", async () => {
   const stateSelect = document.getElementById("StateSelect");
+  const chartElement = document.getElementById('Chart');
+  const dayElements = chartElement.querySelectorAll('.day');
+  const posBarElements = chartElement.querySelectorAll('.pos');
+  const deathsBarElements = chartElement.querySelectorAll('.deaths');
+  const dateElements = chartElement.querySelectorAll('.date');
 
-  async function updateResults(location = stateSelect.value) {
+  async function updateResults(location = stateSelect ? stateSelect.value : 'nj') {
     const getCovidData = async function (state = location) {
-      const url = `https://api.covidtracking.com/v1/states/${state}/current.json`;
+      const url = `https://api.covidtracking.com/v1/states/${state}/daily.json`;
       const response = await fetch(url);
 
       if (response.status !== 200) {
@@ -136,35 +141,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     const formatResults = function (r) {
-      const deprecatedData = ["checkTimeEt", "commercialScore", "dateChecked", "dateModified", "grade", "hash", "hospitalized", "negativeIncrease", "negativeRegularScore", "negativeScore", "posNeg", "positiveScore", "score", "total"];
-      const filteredResults = Object.keys(r).reduce((acc, key) => {
-        if (!deprecatedData.includes(key)) {
-          acc[key] = r[key] || "not reported";
-        }
-
-        return acc;
-      }, {});
-      const date = new Date(filteredResults.lastUpdateEt);
-      const updated = `Updated on ${date.toDateString()} at ${date.toLocaleTimeString()}.`;
-      const results = {
-        updated,
-        positiveCases: filteredResults.positiveCasesViral,
-        positiveIncrease: filteredResults.positiveIncrease,
-        recovered: filteredResults.recovered,
-        death: filteredResults.death,
-        deathIncrease: filteredResults.deathIncrease,
-        hospitalizedCurrently: filteredResults.hospitalizedCurrently,
-        hospitalizedIncrease: filteredResults.hospitalizedIncrease,
-        inIcuCurrently: filteredResults.inIcuCurrently
-      };
-      return results;
+      const fieldsToDisplay = ["lastUpdateEt", "deathIncrease", "positiveIncrease"];
+      const week = r.slice(0, 7);
+      const filteredResults = week.map(day => {
+        const results = {};
+        fieldsToDisplay.forEach(field => {
+          results[field] = day[field];
+        });
+        return results;
+      });
+      return filteredResults;
     };
 
     const fetchResponse = await getCovidData(location);
     const formattedResults = formatResults(fetchResponse);
     console.log(formattedResults);
-    Object.keys(formattedResults).forEach(key => {
-      document.getElementById(`${key}`).innerHTML = formattedResults[key];
+    const largestPos = formattedResults.reduce((acc, day) => {
+      acc = day.positiveIncrease > acc ? day.positiveIncrease : acc;
+      return acc;
+    }, 0);
+    const largestD = formattedResults.reduce((acc, day) => {
+      acc = day.deathIncrease > acc ? day.deathIncrease : acc;
+      return acc;
+    }, 0);
+    dayElements.forEach((day, index) => {
+      posBarElements[index].style.height = `${formattedResults[index].positiveIncrease / largestPos * 100}%`;
+      posBarElements[index].dataset.total = `${formattedResults[index].positiveIncrease}`;
+      deathsBarElements[index].style.height = largestD > 0 ? `${formattedResults[index].deathIncrease / largestD * 100}%` : 0;
+      deathsBarElements[index].dataset.total = `${formattedResults[index].deathIncrease}`;
+      dateElements[index].innerText = new Date(formattedResults[index].lastUpdateEt).toLocaleDateString();
     });
   }
 
@@ -378,5 +383,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
-//# sourceMappingURL=/bing-covid-info.e31bb0bc.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","historic.js"], null)
+//# sourceMappingURL=/historic.81610466.js.map
