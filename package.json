@@ -1,9 +1,10 @@
 {
-  "name": "bing-covid-info",
+  "name": "covid-19-tracker",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "publish": "npm run clean && npm run build && git subtree push --prefix dist origin gh-pages",
     "clean": "rm -rf dist && rm -rf .cache",
     "dev": "parcel *.html --https",
     "build": "parcel build --public-url . *.html"
