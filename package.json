@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf dist && rm -rf .cache",
     "dev": "parcel *.html --https",
-    "build": "parcel build *.html"
+    "build": "parcel build --public-url . *.html"
   },
   "keywords": [],
   "author": "",
