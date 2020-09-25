@@ -120,11 +120,11 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"historic.js":[function(require,module,exports) {
 document.addEventListener("DOMContentLoaded", async () => {
   const stateSelect = document.getElementById("StateSelect");
-  const chartElement = document.getElementById('Chart');
-  const dayElements = chartElement.querySelectorAll('.day');
-  const posBarElements = chartElement.querySelectorAll('.pos');
-  const deathsBarElements = chartElement.querySelectorAll('.deaths');
-  const dateElements = chartElement.querySelectorAll('.date');
+  const chartElements = document.querySelectorAll('.chart');
+  const dayElements = document.querySelectorAll('.day');
+  const posBarElements = document.querySelectorAll('.pos');
+  const deathsBarElements = document.querySelectorAll('.deaths');
+  const dateElements = document.querySelectorAll('.date');
 
   async function updateResults(location = stateSelect ? stateSelect.value : 'nj') {
     const getCovidData = async function (state = location) {
@@ -163,12 +163,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       acc = day.deathIncrease > acc ? day.deathIncrease : acc;
       return acc;
     }, 0);
-    dayElements.forEach((day, index) => {
-      posBarElements[index].style.height = `${formattedResults[index].positiveIncrease / largestPos * 100}%`;
-      posBarElements[index].dataset.total = `${formattedResults[index].positiveIncrease}`;
-      deathsBarElements[index].style.height = largestD > 0 ? `${formattedResults[index].deathIncrease / largestD * 100}%` : 0;
-      deathsBarElements[index].dataset.total = `${formattedResults[index].deathIncrease}`;
-      dateElements[index].innerText = new Date(formattedResults[index].lastUpdateEt).toLocaleDateString();
+    formattedResults.forEach((result, index) => {
+      const posBarEl = posBarElements[index];
+      posBarEl.style.height = `${result.positiveIncrease / largestPos * 100}%`;
+      posBarEl.dataset.total = `${result.positiveIncrease}`;
+      posBarEl.nextElementSibling.innerText = new Date(result.lastUpdateEt).toLocaleDateString();
+      const deathsBarEl = deathsBarElements[index];
+      deathsBarEl.style.height = largestD > 0 ? `${result.deathIncrease / largestD * 100}%` : 0;
+      deathsBarEl.dataset.total = `${result.deathIncrease}`;
+      deathsBarEl.nextElementSibling.innerText = new Date(result.lastUpdateEt).toLocaleDateString();
     });
   }
 
@@ -205,7 +208,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59699" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57140" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
