@@ -1,0 +1,142 @@
+.day:nth-child(1) .bar.pos {
+  background-color: rgba(0, 38, 84, 0.9);
+}
+.day:nth-child(1) .bar.deaths {
+  background-color: rgba(109, 0, 0, 0.9);
+}
+.day:nth-child(2) .bar.pos {
+  background-color: rgba(0, 38, 84, 0.8);
+}
+.day:nth-child(2) .bar.deaths {
+  background-color: rgba(109, 0, 0, 0.8);
+}
+.day:nth-child(3) .bar.pos {
+  background-color: rgba(0, 38, 84, 0.7);
+}
+.day:nth-child(3) .bar.deaths {
+  background-color: rgba(109, 0, 0, 0.7);
+}
+.day:nth-child(4) .bar.pos {
+  background-color: rgba(0, 38, 84, 0.6);
+}
+.day:nth-child(4) .bar.deaths {
+  background-color: rgba(109, 0, 0, 0.6);
+}
+.day:nth-child(5) .bar.pos {
+  background-color: rgba(0, 38, 84, 0.5);
+}
+.day:nth-child(5) .bar.deaths {
+  background-color: rgba(109, 0, 0, 0.5);
+}
+.day:nth-child(6) .bar.pos {
+  background-color: rgba(0, 38, 84, 0.4);
+}
+.day:nth-child(6) .bar.deaths {
+  background-color: rgba(109, 0, 0, 0.4);
+}
+.day:nth-child(7) .bar.pos {
+  background-color: rgba(0, 38, 84, 0.3);
+}
+.day:nth-child(7) .bar.deaths {
+  background-color: rgba(109, 0, 0, 0.3);
+}
+.chart {
+  width: 100%;
+  height: 30vh;
+  background: linear-gradient(180deg, #bbb, transparent);
+  border: 1px solid #bbb;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 2vmin 2vmin 0;
+}
+#HistoricData {
+  margin: 10px;
+}
+.day {
+  flex: 1 1 auto;
+  max-width: calc(100% / 7 - 10px);
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  overflow: hidden;
+}
+.date {
+  font-size: 13px;
+  writing-mode: tb-rl;
+  flex: auto;
+  transform: rotateZ(-180deg) translateY(10px);
+}
+.bar {
+  flex: 1 1 40%;
+  height: 0%;
+  overflow: visible;
+  transition: all 1s ease-in-out;
+  color: white;
+}
+.bar[data-total="0"] {
+  height: 5px !important;
+  background: #009900 !important;
+}
+.bar[data-total="0"]::before {
+  transform: translateY(-1.5em);
+  color: black;
+  text-shadow: 1px 1px white;
+}
+.bar.pos {
+  border: 1px solid #002654;
+  border-bottom: none;
+  text-shadow: 1px 1px #002654;
+}
+.bar.pos::before,
+.bar.deaths::before {
+  content: attr(data-total);
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  transition: all 1s ease-in-out;
+}
+.bar.deaths {
+  border: 1px solid #6d0000;
+  border-bottom: none;
+  margin-left: 1px;
+  text-shadow: 1px 1px #6d0000;
+}
+.posKey,
+.deathsKey {
+  font-weight: 600;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin: 1em 0;
+}
+.key .color {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 1em;
+}
+.key .posKey .color {
+  background: #002654;
+}
+.key .deathsKey .color {
+  background: #6d0000;
+}
+@media all and (max-width: 600px) {
+  .day:nth-child(5),
+  .day:nth-child(6),
+  .day:nth-child(7) {
+    display: none;
+  }
+  .day {
+    max-width: calc(100% / 4 - 10px);
+  }
+}
+@media all and (max-height: 600px) {
+  .chart {
+    height: 80vh;
+  }
+}
+
+
+/*# sourceMappingURL=/historic.df007ef4.css.map */
